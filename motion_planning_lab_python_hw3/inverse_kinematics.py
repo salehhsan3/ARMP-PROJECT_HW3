@@ -155,6 +155,9 @@ def inverse_kinematic_solution(DH_matrix, transform_matrix,):
     return theta
 
 def inverse_kinematics_solutions_endpos(tx, ty, tz):
+    alpha = -np.pi
+    beta = 0.0
+    gamma = 0
     transform = np.matrix([[cos(beta) * cos(gamma), sin(alpha) * sin(beta)*cos(gamma) - cos(alpha)*sin(gamma),
                     cos(alpha)*sin(beta)*cos(gamma)+sin(alpha)*sin(gamma), tx],
                     [cos(beta)* sin(gamma), sin(alpha)*sin(beta)*sin(gamma)+cos(alpha)*cos(gamma),
@@ -191,6 +194,7 @@ def get_valid_inverse_solutions(tx,ty,tz,bb):
         if diff < 0.05:
             final_sol.append(sol)
     final_sol = np.array(final_sol)
+    print(final_sol)
     return [[c[0] for c in p] for p in final_sol]
 
 if __name__ == '__main__':
@@ -218,7 +222,6 @@ if __name__ == '__main__':
         env = Environment(env_idx=env_idx)
         transform = Transform(ur_params)
         bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05)
-        visualizer = Visualize_UR(ur_params, env=env, transform=transform, bb=bb)
         
         fictional_ground = 0.1
         cube1_final = [-0.08, -0.42, fictional_ground] # np.array([1.0655136671983865, -1.140326206296458, 1.7178655987338225, 0.9932569343575324, 1.5707963267948966, -0.5052826595965101])
@@ -230,4 +233,6 @@ if __name__ == '__main__':
         final_cubes = [cube1_final,cube2_final,cube3_final,cube4_final,cube5_final,cube6_final]
 
         for cube in final_cubes:
-            print(get_valid_inverse_solutions(*cube,bb=bb))
+            valid_sols = get_valid_inverse_solutions(*cube,bb=bb)
+            print(valid_sols)
+

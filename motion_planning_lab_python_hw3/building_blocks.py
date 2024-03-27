@@ -14,6 +14,16 @@ def max_angle_difference(conf1, conf2):
         difference = min(difference % (2 * np.pi), (2 * np.pi - difference) % (2 * np.pi))
         max_difference = max(max_difference, difference)
     return max_difference
+
+def get_closest_config(conflist, base_config):
+    best_dist = 1000000
+    best_conf = ["papaya"]
+    for config in conflist:
+        dist = sum(pow(a-b,2) for a, b in zip(base_config,config))
+        if(dist < best_dist):
+            dist=best_dist
+            best_conf = config
+    return best_conf
     
 class Building_Blocks(object):
     '''
