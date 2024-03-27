@@ -154,7 +154,44 @@ def inverse_kinematic_solution(DH_matrix, transform_matrix,):
         theta[3, i] = atan2(T34[1, 0], T34[0, 0])
     return theta
 
+def inverse_kinematics_solutions_endpos(tx, ty, tz):
+    transform = np.matrix([[cos(beta) * cos(gamma), sin(alpha) * sin(beta)*cos(gamma) - cos(alpha)*sin(gamma),
+                    cos(alpha)*sin(beta)*cos(gamma)+sin(alpha)*sin(gamma), tx],
+                    [cos(beta)* sin(gamma), sin(alpha)*sin(beta)*sin(gamma)+cos(alpha)*cos(gamma),
+                     cos(alpha)*sin(beta)*sin(gamma)-sin(alpha)*cos(gamma), ty],
+                    [-sin(beta), sin(alpha)*cos(beta), cos(alpha)*cos(beta), tz],
+                     [0, 0,0,1]])
+    
+    IKS = inverse_kinematic_solution(DH_matrix_UR5e, transform)
+    candidate_sols = []
+    for i in range(IKS.shape[1]):
+        candidate_sols.append(IKS[:, i])  
+    return np.array(candidate_sols)
 
+def get_valid_inverse_solutions(tx,ty,tz,bb):
+    candidate_sols = inverse_kinematics_solutions_endpos(tx, ty, tz)
+    sols = [] 
+    for candidate_sol in candidate_sols:
+        if bb.is_in_collision(candidate_sol):
+            continue
+        for idx, angle in enumerate(candidate_sol):
+            if 2*np.pi > angle > np.pi:
+                candidate_sol[idx] = -(2*np.pi - angle)
+            if -2*np.pi < angle < -np.pi:
+                candidate_sol[idx] = -(2*np.pi + angle)
+        if np.max(candidate_sol) > np.pi or np.min(candidate_sol) < -np.pi:
+            continue  
+        sols.append(candidate_sol)
+    # verify solution:
+    final_sol = []
+    for sol in sols:
+        transform = forward_kinematic_solution(DH_matrix_UR5e, sol)
+        diff = np.linalg.norm(np.array([transform[0,3],transform[1,3],transform[2,3]])-
+                              np.array([tx,ty,tz]))
+        if diff < 0.05:
+            final_sol.append(sol)
+    final_sol = np.array(final_sol)
+    return [[c[0] for c in p] for p in final_sol]
 
 if __name__ == '__main__':
    
