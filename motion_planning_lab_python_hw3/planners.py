@@ -39,7 +39,6 @@ class RRT_STAR(object):
         self.tree.AddVertex(start_conf)
         plan = []
         goal_idx = None
-        print(self.tree.vertices)
         while i < self.max_itr:
             i += 1
             self.real_k = self.get_k_num(i)

@@ -88,10 +88,6 @@ def main():
     cube_coords = manipulator_spheres['wrist_3_link'][-1][:3] # take the position of the cube
     print(cube_coords)
     
-    rrt_star_planner = RRT_STAR(max_step_size=0.5,
-                                max_itr=10000, 
-                                bb=bb)
-    
     visualizer = Visualize_UR(ur_params, env=env, transform=transform, bb=bb)
     visualizer.show_conf(home)
 
@@ -115,7 +111,12 @@ def main():
     at_cube = False
     i = 0
     for rrt_start,rrt_goal in zip(nodes,nodes[1:]):
+        
+        rrt_star_planner = RRT_STAR(max_step_size=0.5,
+                                max_itr=10, 
+                                bb=bb)
 
+        filename = 'path_'+ str(i) + ('_start' if not at_cube else '_end')
         add_before = None
         add_after = None
         if(at_cube is False):
@@ -124,8 +125,8 @@ def main():
             add_before = cubes[i]
             i += 1
         at_cube = not at_cube
-        filename = 'path_'+ str(i) + ('_start' if not at_cube else '_end')
 
+        print(filename,rrt_start, rrt_goal, add_before, add_after,at_cube)
         if bb.is_in_collision(rrt_start):
             print('start in collision')
         if bb.is_in_collision(rrt_goal): 
@@ -135,7 +136,7 @@ def main():
                                             goal_conf=rrt_goal,
                                             filename=filename, 
                                             )
-        visualizer.show_conf(home)
+
         path = []
         if add_before is not None:
             path.append(add_before)
