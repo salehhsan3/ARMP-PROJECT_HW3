@@ -50,6 +50,25 @@ def main():
     cube5_coords =[0.26353072323141574 ,-0.4629969534200313, 0.2651034131371637]
     cube6_coords =  [0.26940059242703984, -0.4730222745248458, 0.021688493137064376]
     initial_cubes_coords = [cube1_coords,cube2_coords,cube3_coords,cube4_coords,cube5_coords,cube6_coords]
+    ##############################################################################################
+    fictional_ground = 0.00955541284784159
+    # for Paulo - constructing a: P
+    cube1_final = [-0.106, -0.483, fictional_ground]
+    cube2_final = [-0.106, -0.29, fictional_ground]
+    cube3_final = [-0.106, -0.385, fictional_ground]
+    cube4_final = [0.176, -0.483, fictional_ground]
+    cube5_final = [-0.166, -0.383, fictional_ground]
+    cube6_final = [-0.22, -0.43, fictional_ground]
+    ##############################################################################################
+    # for Saleh - constructing a: S
+    cube1_final = [-0.08, -0.42, fictional_ground]
+    cube2_final = [-0.15, -0.48, fictional_ground]
+    cube3_final = [-0.23, -0.43, fictional_ground]
+    cube4_final = [0.14, -0.35, fictional_ground]
+    cube5_final = [-0.2, -0.28, fictional_ground]
+    cube6_final = [-0.12, -0.24, fictional_ground]
+    ##############################################################################################
+    final_cubes_coords = [cube1_final,cube2_final,cube3_final,cube4_final,cube5_final,cube6_final]
 
 
     # example of how to find coordinates x-y-z from given configuration
