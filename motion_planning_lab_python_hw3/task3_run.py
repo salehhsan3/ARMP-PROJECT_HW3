@@ -110,27 +110,41 @@ def main():
     # add_after = None
     # filename = 'cube1_to_cube1goal'
 
+    nodes = [home, cube1_approach,cube1_goal,cube2_approach,cube2_goal,cube3_approach,cube3_goal,cube4_approach,cube4_goal,cube5_approach,cube5_goal,cube6_approach,cube6_goal]
+    cubes = [cube1,cube2,cube3,cube4,cube5,cube6]
+    at_cube = False
+    i = 0
+    for rrt_start,rrt_goal in zip(nodes,nodes[1:]):
 
+        add_before = None
+        add_after = None
+        if(at_cube is False):
+            add_after = cubes[i]
+        else:
+            add_before = cubes[i]
+            i += 1
+        at_cube = not at_cube
+        filename = 'path_'+ str(i) + ('_start' if not at_cube else '_end')
 
-    if bb.is_in_collision(rrt_start):
-        print('start in collision')
-    if bb.is_in_collision(rrt_goal): 
-        print('goal in collision')
-    
-    rrt_path = rrt_star_planner.find_path(start_conf=rrt_start,
-                                        goal_conf=rrt_goal,
-                                        filename=filename, 
-                                        )
-    visualizer.show_conf(home)
-    path = []
-    if add_before is not None:
-        path.append(add_before)
-    for conf in rrt_path:
-        path.append(conf)
-    if add_after is not None:
-        path.append(add_after)
-    print(path)
-    np.save(filename+'_path', np.array(path))
+        if bb.is_in_collision(rrt_start):
+            print('start in collision')
+        if bb.is_in_collision(rrt_goal): 
+            print('goal in collision')
+        
+        rrt_path = rrt_star_planner.find_path(start_conf=rrt_start,
+                                            goal_conf=rrt_goal,
+                                            filename=filename, 
+                                            )
+        visualizer.show_conf(home)
+        path = []
+        if add_before is not None:
+            path.append(add_before)
+        for conf in rrt_path:
+            path.append(conf)
+        if add_after is not None:
+            path.append(add_after)
+        print(path)
+        np.save(filename+'_path', np.array(path))
 
     try:
         path = np.load(filename+'_path.npy')
