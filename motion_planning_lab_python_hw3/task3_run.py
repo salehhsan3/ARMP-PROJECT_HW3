@@ -30,7 +30,7 @@ def main():
                         resolution=0.1, 
                         p_bias=0.05,)
     ##############################################################################################
-    fictional_ground = 0.00955541284784159
+    fictional_ground = 0.1
     # for Paulo - constructing a: P
     cube1_final = [-0.106, -0.483, fictional_ground]
     cube2_final = [-0.106, -0.29, fictional_ground]
