@@ -154,20 +154,7 @@ def inverse_kinematic_solution(DH_matrix, transform_matrix,):
         theta[3, i] = atan2(T34[1, 0], T34[0, 0])
     return theta
 
-
-
-if __name__ == '__main__':
-   
-    # Edit the following parameters:
-    alpha = -np.pi
-    beta = 0.0
-    gamma = 0
-    tx = -0.3
-    ty = -0.35
-    tz = 0.1
-    env_idx =3
-    # ------------------------------
-
+def inverse_kinematics_solutions_endpos(tx, ty, tz):
     transform = np.matrix([[cos(beta) * cos(gamma), sin(alpha) * sin(beta)*cos(gamma) - cos(alpha)*sin(gamma),
                     cos(alpha)*sin(beta)*cos(gamma)+sin(alpha)*sin(gamma), tx],
                     [cos(beta)* sin(gamma), sin(alpha)*sin(beta)*sin(gamma)+cos(alpha)*cos(gamma),
@@ -176,18 +163,13 @@ if __name__ == '__main__':
                      [0, 0,0,1]])
     
     IKS = inverse_kinematic_solution(DH_matrix_UR5e, transform)
-
-    ur_params = UR5e_PARAMS(inflation_factor=1)
-    env = Environment(env_idx=env_idx)
-    transform = Transform(ur_params)
-    bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05)
-    visualizer = Visualize_UR(ur_params, env=env, transform=transform, bb=bb)
     candidate_sols = []
     for i in range(IKS.shape[1]):
         candidate_sols.append(IKS[:, i])  
-    candidate_sols = np.array(candidate_sols)
-    
-    # check for collisions and angles limits
+    return np.array(candidate_sols)
+
+def get_valid_inverse_solutions(tx,ty,tz,bb):
+    candidate_sols = inverse_kinematics_solutions_endpos(tx, ty, tz)
     sols = [] 
     for candidate_sol in candidate_sols:
         if bb.is_in_collision(candidate_sol):
@@ -200,7 +182,6 @@ if __name__ == '__main__':
         if np.max(candidate_sol) > np.pi or np.min(candidate_sol) < -np.pi:
             continue  
         sols.append(candidate_sol)
-    
     # verify solution:
     final_sol = []
     for sol in sols:
@@ -210,12 +191,43 @@ if __name__ == '__main__':
         if diff < 0.05:
             final_sol.append(sol)
     final_sol = np.array(final_sol)
+    return [[c[0] for c in p] for p in final_sol]
 
-    try:
-        visualizer.show_path(final_sol)
-        visualizer.show_conf(final_sol[0])
-        print(final_sol)
-        np.save('sol' ,np.array(final_sol))
-    except:
-        print('No solution found')
+if __name__ == '__main__':
+    
+        # Edit the following parameters:
+        alpha = -np.pi
+        beta = 0.0
+        gamma = 0
+        tx = -0.23
+        ty = -0.43
+        tz = 0.1
+        env_idx =3
+        # ------------------------------
 
+        transform = np.matrix([[cos(beta) * cos(gamma), sin(alpha) * sin(beta)*cos(gamma) - cos(alpha)*sin(gamma),
+                        cos(alpha)*sin(beta)*cos(gamma)+sin(alpha)*sin(gamma), tx],
+                        [cos(beta)* sin(gamma), sin(alpha)*sin(beta)*sin(gamma)+cos(alpha)*cos(gamma),
+                        cos(alpha)*sin(beta)*sin(gamma)-sin(alpha)*cos(gamma), ty],
+                        [-sin(beta), sin(alpha)*cos(beta), cos(alpha)*cos(beta), tz],
+                        [0, 0,0,1]])
+        
+        IKS = inverse_kinematic_solution(DH_matrix_UR5e, transform)
+
+        ur_params = UR5e_PARAMS(inflation_factor=1)
+        env = Environment(env_idx=env_idx)
+        transform = Transform(ur_params)
+        bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05)
+        visualizer = Visualize_UR(ur_params, env=env, transform=transform, bb=bb)
+        
+        fictional_ground = 0.1
+        cube1_final = [-0.08, -0.42, fictional_ground] # np.array([1.0655136671983865, -1.140326206296458, 1.7178655987338225, 0.9932569343575324, 1.5707963267948966, -0.5052826595965101])
+        cube2_final = [-0.15, -0.48, fictional_ground] # np.array([1.0655136671983865,-1.140326206296458,1.7178655987338225,0.9932569343575324,1.5707963267948966,-0.5052826595965101])
+        cube3_final = [-0.23, -0.43, fictional_ground] # np.array([1.0655136671983865,-1.140326206296458,1.7178655987338225,0.9932569343575324,1.5707963267948966,-0.5052826595965101])
+        cube4_final = [-0.14, -0.35, fictional_ground]
+        cube5_final = [-0.2, -0.28, fictional_ground]
+        cube6_final = [-0.12, -0.24, fictional_ground]
+        final_cubes = [cube1_final,cube2_final,cube3_final,cube4_final,cube5_final,cube6_final]
+
+        for cube in final_cubes:
+            print(get_valid_inverse_solutions(*cube,bb=bb))
