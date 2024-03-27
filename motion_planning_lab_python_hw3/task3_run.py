@@ -4,6 +4,7 @@ from kinematics import UR5e_PARAMS, Transform
 from planners import RRT_STAR
 from building_blocks import Building_Blocks
 from visualizer import Visualize_UR
+from inverse_kinematics import get_valid_inverse_solutions
 
 
 def main():
@@ -92,6 +93,8 @@ def main():
     
     visualizer = Visualize_UR(ur_params, env=env, transform=transform, bb=bb)
     visualizer.show_conf(home)
+    
+    cubes_goal = [get_valid_inverse_solutions(*cube, bb) for cube in final_cubes_coords]
 
     # ---------Example-----------
     # go to cube 1

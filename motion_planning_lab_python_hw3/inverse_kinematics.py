@@ -221,9 +221,9 @@ if __name__ == '__main__':
         visualizer = Visualize_UR(ur_params, env=env, transform=transform, bb=bb)
         
         fictional_ground = 0.1
-        cube1_final = [-0.08, -0.42, fictional_ground] # np.array([1.0655136671983865, -1.140326206296458, 1.7178655987338225, 0.9932569343575324, 1.5707963267948966, -0.5052826595965101])
-        cube2_final = [-0.15, -0.48, fictional_ground] # np.array([1.0655136671983865,-1.140326206296458,1.7178655987338225,0.9932569343575324,1.5707963267948966,-0.5052826595965101])
-        cube3_final = [-0.23, -0.43, fictional_ground] # np.array([1.0655136671983865,-1.140326206296458,1.7178655987338225,0.9932569343575324,1.5707963267948966,-0.5052826595965101])
+        cube1_final = [-0.08, -0.42, fictional_ground]
+        cube2_final = [-0.15, -0.48, fictional_ground]
+        cube3_final = [-0.23, -0.43, fictional_ground]
         cube4_final = [-0.14, -0.35, fictional_ground]
         cube5_final = [-0.2, -0.28, fictional_ground]
         cube6_final = [-0.12, -0.24, fictional_ground]
