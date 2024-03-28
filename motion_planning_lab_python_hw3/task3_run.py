@@ -57,12 +57,12 @@ def main():
     ##############################################################################################
     fictional_ground = 0.1
     # for Paulo - constructing a: P
-    cube1_final = [-0.106, -0.483, fictional_ground]
-    cube2_final = [-0.106, -0.29, fictional_ground]
-    cube3_final = [-0.106, -0.385, fictional_ground]
-    cube4_final = [0.176, -0.483, fictional_ground]
-    cube5_final = [-0.166, -0.383, fictional_ground]
-    cube6_final = [-0.22, -0.43, fictional_ground]
+    # cube1_final = [-0.106, -0.483, fictional_ground]
+    # cube2_final = [-0.106, -0.29, fictional_ground]
+    # cube3_final = [-0.106, -0.385, fictional_ground]
+    # cube4_final = [0.176, -0.483, fictional_ground]
+    # cube5_final = [-0.166, -0.383, fictional_ground]
+    # cube6_final = [-0.22, -0.43, fictional_ground]
     ##############################################################################################
     # for Saleh - constructing a: S
     cube1_final = [-0.08, -0.42, fictional_ground]
@@ -89,10 +89,7 @@ def main():
     i = 0
     at_cube = False
     plan_list = []
-    while not np.array_equal(rrt_goal, cube_goals[-1]):
-        env = Environment(env_idx=3, cube_coords=initial_cubes_coords)
-        bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05,)
-        
+    while not np.array_equal(rrt_goal, cube_goals[-1]):        
         if at_cube:
             # print("i: ",i)
             cube_goals[i] = np.array(get_closest_config(get_valid_inverse_solutions(*final_cubes_coords[i],bb=bb), cubes[i]))
@@ -126,6 +123,8 @@ def main():
             add_after = cubes[i]
         at_cube = not at_cube
         
+        env = Environment(env_idx=3, cube_coords=initial_cubes_coords)
+        bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05,)
         rrt_star_planner = RRT_STAR(max_step_size=0.5, max_itr=10000, bb=bb)
         rrt_path = rrt_star_planner.find_path(start_conf=rrt_start, goal_conf=rrt_goal, filename=filename,)
         if bb.is_in_collision(rrt_start):
