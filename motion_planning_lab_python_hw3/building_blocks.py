@@ -16,8 +16,8 @@ def max_angle_difference(conf1, conf2):
     return max_difference
 
 def get_closest_config(conflist, base_config):
-    best_dist = 1000000
-    best_conf = ["papaya"]
+    best_dist = float('inf')
+    best_conf = []
     for config in conflist:
         dist = sum(pow(a-b,2) for a, b in zip(base_config,config))
         if(dist < best_dist):
