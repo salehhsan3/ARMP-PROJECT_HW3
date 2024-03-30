@@ -89,13 +89,18 @@ def main():
     i = 0
     at_cube = False
     plan_list = []
+    interim_cube_coords = [c for c in initial_cubes_coords]
+    env = Environment(env_idx=3, cube_coords=initial_cubes_coords)
+    bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05,)
     while not np.array_equal(rrt_goal, cube_goals[-1]):        
         if at_cube:
             # print("i: ",i)
             cube_goals[i] = np.array(get_closest_config(get_valid_inverse_solutions(*final_cubes_coords[i],bb=bb), cubes[i]))
-            manipulator_spheres = transform.conf2sphere_coords(cube_goals[i]) # forward kinematics
-            initial_cubes_coords[i] = np.array(manipulator_spheres['wrist_3_link'][-1][:3]) # we moved a cube!
-            # print("computed coords: ", initial_cubes_coords[i])
+            # manipulator_spheres = transform.conf2sphere_coords(cube_goals[i]) # forward kinematics
+            # interim_cube_coords[i] = np.array(manipulator_spheres['wrist_3_link'][-1][:3]) # we moved a cube!
+            if bb.is_in_collision(cube_goals[i]): # maybe it got too close to the ground so use fictiional ground
+                print("the computed x-y-z coordinates were too close to the ground, trans format:", cube_goals[i])
+            # print("computed coords: ", interim_cube_coords[i])
             rrt_start = cube_approaches[i]
             rrt_goal = cube_goals[i]
             add_before = cubes[i]
@@ -112,11 +117,16 @@ def main():
                 rrt_goal = cube_approaches[i]
                 filename = f'homeTocube{i+1}'
                 # print(filename)
+                add_before = None
             else:
-                rrt_start = cube_goals[i - 1] if i > 0 else home
+                rrt_start = ( cube_goals[i - 1] ) if i > 0 else home # could also use the configuration right before cube_goal from previous path as an approximation
                 rrt_goal = cube_approaches[i]
                 filename = f'{"cube" + str(i) + "_goal" if i > 0 else "home"}Tocube{i+1}_approach'
                 # print(filename)
+                # add_before = cube_goals[i - 1]
+                
+                manipulator_spheres = transform.conf2sphere_coords(cube_goals[i-1]) # forward kinematics
+                interim_cube_coords[i-1] = np.array(manipulator_spheres['wrist_3_link'][-1][:3]) # we moved a cube!
             plan_list.append('open') # when moving from cube{i}_goal to cube{i+1}_approaches open the gripper so you can hold next cube
             plan_list.append(filename)
             add_before = None
@@ -126,6 +136,7 @@ def main():
         env = Environment(env_idx=3, cube_coords=initial_cubes_coords)
         bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05,)
         rrt_star_planner = RRT_STAR(max_step_size=0.5, max_itr=10000, bb=bb)
+        initial_cubes_coords = [c for c in interim_cube_coords] # after moving the cubes, check for location changes
         rrt_path = rrt_star_planner.find_path(start_conf=rrt_start, goal_conf=rrt_goal, filename=filename,)
         if bb.is_in_collision(rrt_start):
             print('start in collision')
