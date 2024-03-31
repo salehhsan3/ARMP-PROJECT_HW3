@@ -42,6 +42,8 @@ class RRT_STAR(object):
         # print("vertices: ", self.tree.vertices)
         while i < self.max_itr:
             i += 1
+            if goal_idx != None:
+                break # skip iterations if a solution was found!
             self.real_k = self.get_k_num(i)
             random_state = self.bb.sample(goal_conf)
             nearest_state_idx, nearest_state = self.tree.GetNearestVertex(random_state)

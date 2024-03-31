@@ -1,4 +1,5 @@
 import numpy as np
+import os
 from environment import Environment
 from kinematics import UR5e_PARAMS, Transform
 from planners import RRT_STAR
@@ -57,20 +58,22 @@ def main():
     ##############################################################################################
     fictional_ground = 0.1
     # for Paulo - constructing a: P
-    # cube1_final = [-0.106, -0.483, fictional_ground]
-    # cube2_final = [-0.106, -0.29, fictional_ground]
-    # cube3_final = [-0.106, -0.385, fictional_ground]
-    # cube4_final = [0.176, -0.483, fictional_ground]
-    # cube5_final = [-0.166, -0.383, fictional_ground]
-    # cube6_final = [-0.22, -0.43, fictional_ground]
+    cube1_final = [-0.106, -0.483, fictional_ground]
+    cube2_final = [-0.106, -0.29, fictional_ground]
+    cube3_final = [-0.106, -0.385, fictional_ground]
+    cube4_final = [0.176, -0.483, fictional_ground]
+    cube5_final = [-0.166, -0.383, fictional_ground]
+    cube6_final = [-0.22, -0.43, fictional_ground]
+    dir_name = 'P-path'
     ##############################################################################################
     # for Saleh - constructing a: S
-    cube1_final = [-0.08, -0.42, fictional_ground]
-    cube2_final = [-0.15, -0.48, fictional_ground]
-    cube3_final = [-0.23, -0.43, fictional_ground]
-    cube4_final = [-0.14, -0.35, fictional_ground]
-    cube5_final = [-0.2, -0.28, fictional_ground]
-    cube6_final = [-0.12, -0.24, fictional_ground]
+    # cube1_final = [-0.08, -0.42, fictional_ground]
+    # cube2_final = [-0.15, -0.48, fictional_ground]
+    # cube3_final = [-0.23, -0.43, fictional_ground]
+    # cube4_final = [-0.14, -0.35, fictional_ground]
+    # cube5_final = [-0.2, -0.28, fictional_ground]
+    # cube6_final = [-0.12, -0.24, fictional_ground]
+    # dir_name = 'S-path'
     ##############################################################################################
     final_cubes_coords = [cube1_final,cube2_final,cube3_final,cube4_final,cube5_final,cube6_final]
 
@@ -90,18 +93,12 @@ def main():
     at_cube = False
     plan_list = []
     interim_cube_coords = [c for c in initial_cubes_coords]
-    env = Environment(env_idx=3, cube_coords=initial_cubes_coords)
-    bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05,)
     previous_path = []
     while not np.array_equal(rrt_goal, cube_goals[-1]):        
         if at_cube:
-            # print("i: ",i)
             cube_goals[i] = np.array(get_closest_config(get_valid_inverse_solutions(*final_cubes_coords[i],bb=bb), cubes[i]))
             manipulator_spheres = transform.conf2sphere_coords(cube_goals[i]) # forward kinematics
             interim_cube_coords[i] = np.array(manipulator_spheres['wrist_3_link'][-1][:3]) # we moved a cube!
-            if bb.is_in_collision(cube_goals[i]): # maybe it got too close to the ground so use fictiional ground
-                print("the computed x-y-z coordinates were too close to the ground, trans format:", cube_goals[i])
-            # print("computed coords: ", interim_cube_coords[i])
             rrt_start = cube_approaches[i]
             rrt_goal = cube_goals[i]
             add_before = cubes[i]
@@ -109,15 +106,12 @@ def main():
             filename = f'cube{i+1}Tocube{i+1}_goal'
             plan_list.append('close') # when moving from cube{i}_goal to cube{i+1}_approaches open the gripper so you can hold next cube
             plan_list.append(filename)
-            # print(filename)
             i += 1
         else:
-            # print("i: ",i)
             if i == 0:
                 rrt_start = home
                 rrt_goal = cube_approaches[i]
                 filename = f'homeTocube{i+1}'
-                # print(filename)
                 add_before = None
             else:
                 # rrt_start = ( cube_goals[i - 1] ) if i > 0 else home # could also use the configuration right before cube_goal from previous path as an approximation
@@ -125,14 +119,9 @@ def main():
                 rrt_start = cube_goal_approx if i > 0 else home
                 rrt_goal = cube_approaches[i]
                 filename = f'{"cube" + str(i) + "_goal" if i > 0 else "home"}Tocube{i+1}_approach'
-                # print(filename)
                 add_before = cube_goals[i - 1]
-                
-                # manipulator_spheres = transform.conf2sphere_coords(cube_goals[i-1]) # forward kinematics
-                # interim_cube_coords[i-1] = np.array(manipulator_spheres['wrist_3_link'][-1][:3]) # we moved a cube!
             plan_list.append('open') # when moving from cube{i}_goal to cube{i+1}_approaches open the gripper so you can hold next cube
             plan_list.append(filename)
-            # add_before = None
             add_after = cubes[i]
         at_cube = not at_cube
         
@@ -155,9 +144,9 @@ def main():
             path.append(add_after)
         previous_path = np.array([n for n in path])
         print(path)
-        np.save(filename+'_path', np.array(path))
+        np.save(os.path.join(dir_name,filename+'_path'), np.array(path))
     plan_list.append('open') # open the gripper at the end when you reach the goal!
-    np.save('plan_list_path', np.array(plan_list))
+    np.save(os.path.join(dir_name,'plan_list_path'), np.array(plan_list))
     
 if __name__ == '__main__':
     main()
