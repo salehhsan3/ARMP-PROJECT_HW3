@@ -58,12 +58,18 @@ def main():
     ##############################################################################################
     fictional_ground = 0.1
     # for Paulo - constructing a: P
-    cube1_final = [-0.106, -0.483, fictional_ground]
-    cube2_final = [-0.106, -0.29, fictional_ground]
-    cube3_final = [-0.106, -0.385, fictional_ground]
-    cube4_final = [0.176, -0.483, fictional_ground]
-    cube5_final = [-0.166, -0.383, fictional_ground]
-    cube6_final = [-0.22, -0.43, fictional_ground]
+    # cube1_final = [-0.106, -0.483, fictional_ground]
+    # cube2_final = [-0.106, -0.29, fictional_ground]
+    # cube3_final = [-0.106, -0.385, fictional_ground]
+    # cube4_final = [-0.176, -0.483, fictional_ground]
+    # cube5_final = [-0.166, -0.383, fictional_ground] # always fails with inverse kinematics
+    # cube6_final = [-0.22, -0.43, fictional_ground]
+    cube1_final = [-0.25,-0.33, fictional_ground]
+    cube2_final = [-0.25,-0.50, fictional_ground]
+    cube3_final = [-0.25,-0.25, fictional_ground]
+    cube4_final = [-0.175,-0.33, fictional_ground]
+    cube5_final = [-0.175,-0.25, fictional_ground]
+    cube6_final = [-0.25,-0.4, fictional_ground]
     dir_name = 'P-path'
     ##############################################################################################
     # for Saleh - constructing a: S
@@ -96,6 +102,7 @@ def main():
     previous_path = []
     while not np.array_equal(rrt_goal, cube_goals[-1]):        
         if at_cube:
+            print("current coord: ", final_cubes_coords[i])
             cube_goals[i] = np.array(get_closest_config(get_valid_inverse_solutions(*final_cubes_coords[i],bb=bb), cubes[i]))
             manipulator_spheres = transform.conf2sphere_coords(cube_goals[i]) # forward kinematics
             interim_cube_coords[i] = np.array(manipulator_spheres['wrist_3_link'][-1][:3]) # we moved a cube!
