@@ -194,7 +194,7 @@ def get_valid_inverse_solutions(tx,ty,tz,bb):
         if diff < 0.05:
             final_sol.append(sol)
     final_sol = np.array(final_sol)
-    # print(final_sol)
+    print("valid inverse solutions: ", final_sol)
     return [[c[0] for c in p] for p in final_sol]
 
 if __name__ == '__main__':
