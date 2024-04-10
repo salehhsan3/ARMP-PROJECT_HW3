@@ -23,26 +23,30 @@ def startVisualization():
     ##############################################################################################
     fictional_ground = 0.1
     # for Paulo - constructing a: P
-    cube1_final = [-0.25,-0.33, fictional_ground]
-    cube2_final = [-0.25,-0.50, fictional_ground]
-    cube3_final = [-0.25,-0.25, fictional_ground]
-    cube4_final = [-0.175,-0.33, fictional_ground]
-    cube5_final = [-0.175,-0.25, fictional_ground]
-    cube6_final = [-0.25,-0.4, fictional_ground]
-    dir_name = 'P-path'
+    # cube1_final = [-0.25,-0.33, fictional_ground]
+    # cube2_final = [-0.25,-0.50, fictional_ground]
+    # cube3_final = [-0.25,-0.25, fictional_ground]
+    # cube4_final = [-0.175,-0.33, fictional_ground]
+    # cube5_final = [-0.175,-0.25, fictional_ground]
+    # cube6_final = [-0.25,-0.4, fictional_ground]
+    # dir_name = 'P-path'
     ##############################################################################################
     # for Saleh - constructing a: S
-    # cube1_final = [-0.08, -0.42, fictional_ground]
-    # cube2_final = [-0.15, -0.48, fictional_ground]
-    # cube3_final = [-0.23, -0.43, fictional_ground]
-    # cube4_final = [-0.14, -0.35, fictional_ground]
-    # cube5_final = [-0.2, -0.28, fictional_ground]
-    # cube6_final = [-0.12, -0.24, fictional_ground]
-    # dir_name = 'C:\\Users\\Saleh\\Desktop\\ARMP\\ARMP-PROJECT_HW3\\S-path'
+    cube1_final = [-0.08, -0.42, fictional_ground]
+    cube2_final = [-0.15, -0.48, fictional_ground]
+    cube3_final = [-0.23, -0.43, fictional_ground]
+    cube4_final = [-0.14, -0.35, fictional_ground]
+    cube5_final = [-0.2, -0.28, fictional_ground]
+    cube6_final = [-0.12, -0.24, fictional_ground]
+    dir_name = 'C:\\Users\\Saleh\\Desktop\\S-path-saved'
     ##############################################################################################
     
     final_cubes_coords = [cube1_final,cube2_final,cube3_final,cube4_final,cube5_final,cube6_final]
     interim_cube_coords = [c for c in initial_cubes_coords]
+    # interim_cube_coords[0] = cube1_final
+    # interim_cube_coords[1] = cube2_final
+    # interim_cube_coords[2] = cube3_final
+    initial_cubes_coords = interim_cube_coords
     
     env = Environment(env_idx=3, cube_coords=initial_cubes_coords)
     bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05,)

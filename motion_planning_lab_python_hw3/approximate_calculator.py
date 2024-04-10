@@ -74,18 +74,12 @@ def main():
     # dir_name = 'P-path'
     ##############################################################################################
     # for Saleh - constructing a: S
-    # cube1_final = [-0.08, -0.42, fictional_ground]
-    # cube2_final = [-0.15, -0.48, fictional_ground]
-    # cube3_final = [-0.23, -0.43, fictional_ground]
-    # cube4_final = [-0.14, -0.35, fictional_ground]
-    # cube5_final = [-0.2, -0.28, fictional_ground]
-    # cube6_final = [-0.12, -0.24, fictional_ground]
-    cube1_final = [-0.1,-0.25, fictional_ground]
-    cube2_final = [-0.20,-0.25, fictional_ground]
-    cube3_final = [-0.13,-0.35, fictional_ground]
-    cube4_final = [-0.07,-0.43, fictional_ground]
-    cube5_final = [-0.01,-0.50, fictional_ground]
-    cube6_final = [-0.15,-0.50, fictional_ground]
+    cube1_final = [-0.08, -0.42, fictional_ground]
+    cube2_final = [-0.15, -0.48, fictional_ground]
+    cube3_final = [-0.23, -0.43, fictional_ground]
+    cube4_final = [-0.14, -0.35, fictional_ground]
+    cube5_final = [-0.2, -0.28, fictional_ground]
+    cube6_final = [-0.12, -0.24, fictional_ground]
     dir_name = 'S-Path-new'
     ##############################################################################################
     final_cubes_coords = [cube1_final,cube2_final,cube3_final,cube4_final,cube5_final,cube6_final]

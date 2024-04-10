@@ -194,7 +194,7 @@ def get_valid_inverse_solutions(tx,ty,tz,bb):
         if diff < 0.05:
             final_sol.append(sol)
     final_sol = np.array(final_sol)
-    print("valid inverse solutions: ", final_sol)
+    # print("valid inverse solutions: ", final_sol)
     return [[c[0] for c in p] for p in final_sol]
 
 if __name__ == '__main__':
@@ -217,11 +217,14 @@ if __name__ == '__main__':
                         [0, 0,0,1]])
         
         IKS = inverse_kinematic_solution(DH_matrix_UR5e, transform)
-
-        ur_params = UR5e_PARAMS(inflation_factor=1)
-        env = Environment(env_idx=env_idx)
-        transform = Transform(ur_params)
-        bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05)
+        
+        cube1_coords = [-0.10959248574268822, -0.6417732149769166, 0.1390226933317033]
+        cube2_coords = [0.08539928976845282, -0.8370930220946053, 0.13813472317717034]
+        cube3_coords =  [-0.008445229140271685, -0.7365370847309188, 0.00955541284784159]
+        cube4_coords = [0.23647185443765273 ,-0.769747539513382, 0.03971366463235271]
+        cube5_coords =[0.26353072323141574 ,-0.4629969534200313, 0.2651034131371637]
+        cube6_coords =  [0.26940059242703984, -0.4730222745248458, 0.021688493137064376]
+        initial_cubes_coords = [cube1_coords,cube2_coords,cube3_coords,cube4_coords,cube5_coords,cube6_coords]
         
         fictional_ground = 0.1
         cube1_final = [-0.08, -0.42, fictional_ground]
@@ -231,8 +234,18 @@ if __name__ == '__main__':
         cube5_final = [-0.2, -0.28, fictional_ground]
         cube6_final = [-0.12, -0.24, fictional_ground]
         final_cubes = [cube1_final,cube2_final,cube3_final,cube4_final,cube5_final,cube6_final]
+        
+        # initial_cubes_coords[0] = final_cubes[0]
+        # initial_cubes_coords[1] = final_cubes[1]
+        # initial_cubes_coords[2] = final_cubes[2]
+        
+        ur_params = UR5e_PARAMS(inflation_factor=1)
+        # env = Environment(env_idx=env_idx, cube_coords=initial_cubes_coords)
+        env = Environment(env_idx=env_idx)
+        transform = Transform(ur_params)
+        bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05)
 
         for cube in final_cubes:
             valid_sols = get_valid_inverse_solutions(*cube,bb=bb)
-            # print(valid_sols)
+            print('valid solutions: ', valid_sols)
 
