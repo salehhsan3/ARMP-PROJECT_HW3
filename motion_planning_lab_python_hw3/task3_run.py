@@ -119,7 +119,7 @@ def main():
             add_after = None
             filename = f'cube{i+1}Tocube{i+1}_goal'
             plan_list.append('close') # when moving from cube{i}_goal to cube{i+1}_approaches open the gripper so you can hold next cube
-            plan_list.append(filename)
+            plan_list.append(filename + '_path.npy')
             i += 1
         else:
             if i == 0:
@@ -135,7 +135,7 @@ def main():
                 filename = f'{"cube" + str(i) + "_goal" if i > 0 else "home"}Tocube{i+1}_approach'
                 add_before = cube_goals[i - 1]
             plan_list.append('open') # when moving from cube{i}_goal to cube{i+1}_approaches open the gripper so you can hold next cube
-            plan_list.append(filename)
+            plan_list.append(filename + '_path.npy')
             add_after = cubes[i]
         at_cube = not at_cube
         

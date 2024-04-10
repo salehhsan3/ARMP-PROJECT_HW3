@@ -68,6 +68,7 @@ def startVisualization():
         env = Environment(env_idx=3, cube_coords=initial_cubes_coords)
         bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05,)
         visualizer = Visualize_UR(ur_params, env=env, transform=transform, bb=bb)
+        visualizer.show_conf(np.deg2rad([97.6, -38.3, -52.1, -100.8, -90.1, 8.5]) )
         try:
             print(os.path.join(dir_name, filename) + '_path.npy')
             path = np.load(os.path.join(dir_name, filename) + '_path.npy')

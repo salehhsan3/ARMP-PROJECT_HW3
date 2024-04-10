@@ -422,46 +422,62 @@ def main():
     #############################################
     
     #cube3_goal->cube_4_approach
-    rrt_start = np.array([0.8288548452878606, -1.247008414469712, 1.8762297876817924, 0.9415749535828163, 1.5707963267948968, -0.7419414815070361])
-    rrt_goal = cube4_approach
+    # rrt_start = np.array([0.8288548452878606, -1.247008414469712, 1.8762297876817924, 0.9415749535828163, 1.5707963267948968, -0.7419414815070361])
+    # rrt_goal = cube4_approach
     
-    # cube5_goal ->cube6_approach:
-    # rrt_start = np.array([-1.6521184004291039, -1.1080418640327643, -1.9090524044737762, -0.689894957963152, 1.312583121735577, 2.4209683549554564])
-    # rrt_start = np.array(get_closest_config(get_valid_inverse_solutions(*final_cubes_coords[4],bb=bb), cubes[4]))
-    # rrt_goal = cube6_approach
+    # # cube5_goal ->cube6_approach:
+    # # rrt_start = np.array([-1.6521184004291039, -1.1080418640327643, -1.9090524044737762, -0.689894957963152, 1.312583121735577, 2.4209683549554564])
+    # # rrt_start = np.array(get_closest_config(get_valid_inverse_solutions(*final_cubes_coords[4],bb=bb), cubes[4]))
+    # # rrt_goal = cube6_approach
     
-    initial_cubes_coords[0] = cube1_final
-    initial_cubes_coords[1] = cube2_final
-    initial_cubes_coords[2] = cube3_final
-    # initial_cubes_coords[3] = cube4_final
-    # initial_cubes_coords[4] = cube5_final
-    env = Environment(env_idx=3, cube_coords=initial_cubes_coords)
-    bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05,)
+    # initial_cubes_coords[0] = cube1_final
+    # initial_cubes_coords[1] = cube2_final
+    # initial_cubes_coords[2] = cube3_final
+    # # initial_cubes_coords[3] = cube4_final
+    # # initial_cubes_coords[4] = cube5_final
+    # env = Environment(env_idx=3, cube_coords=initial_cubes_coords)
+    # bb = Building_Blocks(transform=transform, ur_params=ur_params, env=env, resolution=0.1, p_bias=0.05,)
     
-    # rrt_start = np.array(get_closest_config(get_valid_inverse_solutions(*final_cubes_coords[4],bb=bb), cubes[4]))
-    # rrt_goal = cube6_approach
+    # # rrt_start = np.array(get_closest_config(get_valid_inverse_solutions(*final_cubes_coords[4],bb=bb), cubes[4]))
+    # # rrt_goal = cube6_approach
     
-    rrt_star_planner = RRT_STAR(max_step_size=0.5, max_itr=10000, bb=bb)
-    # filename = f'cube{5}_goalTocube{6}_approach'
-    filename = f'cube{3}_goalTocube{4}_approach'
-    rrt_path = rrt_star_planner.find_path(start_conf=rrt_start, goal_conf=rrt_goal, filename=filename,)
-    add_before = cube3_goal
-    add_after = cube4
-    if bb.is_in_collision(rrt_start):
-        print('start in collision:  ')
-    if bb.is_in_collision(rrt_goal): 
-        print('goal in collision')
-    path = []
-    if add_before is not None:
-        path.append(add_before)
-    for conf in rrt_path:
-        path.append(conf)
-    if add_after is not None:
-        path.append(add_after)
-    print(path)
-    np.save(os.path.join(dir_name,filename+'_path'), np.array(path))
+    # rrt_star_planner = RRT_STAR(max_step_size=0.5, max_itr=10000, bb=bb)
+    filename = f'cube{5}_goalTocube{6}_approach'
+    # # filename = f'cube{3}_goalTocube{4}_approach'
+    # rrt_path = rrt_star_planner.find_path(start_conf=rrt_start, goal_conf=rrt_goal, filename=filename,)
+    # add_before = cube3_goal
+    # add_after = cube4
+    # if bb.is_in_collision(rrt_start):
+    #     print('start in collision:  ')
+    # if bb.is_in_collision(rrt_goal): 
+    #     print('goal in collision')
+    # path = []
+    # if add_before is not None:
+    #     path.append(add_before)
+    # for conf in rrt_path:
+    #     path.append(conf)
+    # if add_after is not None:
+    #     path.append(add_after)
+    # print(path)
+    path = [
+                [-1.7932412692447866, -1.3570677718520676, -2.453481814104846, -0.9018393944277766, 1.5707963267948963, 2.919147711139903],
+                [-2.049418657518909, -0.9723434402313325, -1.9761026616680115, -0.6136108108094118, 1.7971801458966477, 1.35791615966389],
+                [-1.635111143925995, -1.0681194353957966, -1.4398135154664706, -1.2899462324397897, 1.9772456908777152, 0.14916490865235632],
+                [-1.0113498261276879, -0.8438511946160628, -1.4795850748215895, -0.5155265868945792, 1.5501175065175574, -0.203545343030121],
+                [-0.7740214923771627, -1.1378934499997488, -0.531610144880873, -0.598490134451128, 1.8414568713820607, 0.3472859931596162],
+                [-0.9603310697169565, -0.8891479627037193, 0.4773744057666254, -0.4579737818313741, 2.144473326946488, 0.680195110881691],
+                [-0.8144944922736681, -1.302756234394673, 1.1733228207475026, 0.42803084100779637, 1.8393996358782945, 0.2730838010991533],
+                [-0.6429902851139032, -0.8649673769863452, 0.9776244505784986, -0.2839866041714573, 0.13130806361845582, -0.4400967910168071],
+                [-0.3421586092797902, -0.7330575591703946, 0.7342019836617225, -1.4436125633949564, -0.3643493149554064, -1.3893974653994046],
+                [0.7119368138363067, -1.1369555343436564, 1.278251909965735, -1.2035626008803406, -0.5617539020653363, -0.548158511941397],
+                [0.702755241073681, -1.4434717868550677, 2.1624497912111504, -1.8855735248781993, -0.4857730212205842, 0.060141254452710236],
+                [1.36659280431156, -1.0768681484805014, 2.1101030656611446, -1.5289084247470326, -0.22514747350726852, 0.4834562028024293],
+                [ 1.36135682, -0.98785636,  2.11010307, -1.6231562,  -0.22165682,  0.5131268 ]
+            ]
+    # np.save(os.path.join(dir_name,filename+'_path'), np.array(path))
 
-    
+    np.save(filename+'_path', np.array(path))
+
     
     
 if __name__ == '__main__':
