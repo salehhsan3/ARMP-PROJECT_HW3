@@ -72,9 +72,9 @@ def startVisualization():
         except:
             print('No Path Found')
         initial_cubes_coords = [c for c in interim_cube_coords]
-    visualizer.show_conf(path[-1])
+    #visualizer.show_conf(path[-1])
 if __name__ == '__main__':
-    startVisualization()()
+    startVisualization()
 
 
 

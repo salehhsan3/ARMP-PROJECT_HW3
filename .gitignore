@@ -5,3 +5,4 @@ motion_planning_lab_python_hw3/__pycache__/RRTTree.cpython-311.pyc
 motion_planning_lab_python_hw3/__pycache__/kinematics.cpython-311.pyc
 motion_planning_lab_python_hw3/__pycache__/visualizer.cpython-311.pyc
 motion_planning_lab_python_hw3/__pycache__/inverse_kinematics.cpython-311.pyc
+motion_planning_lab_python_hw3/__pycache__/*.pyc
